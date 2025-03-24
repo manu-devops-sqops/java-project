@@ -43,7 +43,7 @@
         <logback.version>1.2.3</logback.version>
         <cucumber-version>1.2.6</cucumber-version>
         <modelmapper-version>2.3.6</modelmapper-version>
-        <lombok-version>1.18.10</lombok-version>
+        <lombok-version>1.18.36</lombok-version>
         <!-- add the rest controller list for swaggaer -->
         <rest-locations>com.test.sampleapp.web</rest-locations>
 
