@@ -1,6 +1,9 @@
 package com.test.sampleapp.integration;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+ // or Given/When based on the context
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,7 +28,7 @@ public class GetVersionStep extends CucumberRoot {
                 response.getBody(), currentStatusCode.value(), is(statusCode));
     }
 
-    @And("^the client receives server version (.+)$")
+    @Then("^the client receives server version (.+)$")
     public void the_client_receives_server_version_body(String version) throws Throwable {
         assertThat(response.getBody(), is(version));
     }
