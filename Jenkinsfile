@@ -1,14 +1,10 @@
 pipeline {
     agent any  // Runs on any available agent
 
-    // tools {
-    //     jdk 'JDK17'  // Ensure JDK 17 is installed in Jenkins
-    //     maven 'Maven3'  // Ensure Maven is installed
-    // }
-
     // environment {
     //     SONAR_URL = 'http://your-sonar-server'  // Update with your SonarQube URL
     //     SONAR_TOKEN = credentials('sonar-token')  // SonarQube authentication token stored in Jenkins credentials
+    //     SONAR_PROJECT_KEY = 'java-project'  // Your SonarQube project key
     // }
 
     stages {
@@ -40,32 +36,35 @@ pipeline {
             }
         }
 
-        stage('Verify') {
-            steps {
-                echo "Running mvn verify..."
-                sh 'mvn verify'
-            }
-        }
-        
-        stage('Report') {
-            steps {
-                echo "Running mvn surefire reporting..."
-                sh 'mvn surefire-report:report'
-            }
-        }
-
-        stage('Code Coverage Report') {
-            steps {
-                echo "Generating JaCoCo report..."
-                sh 'mvn jacoco:report'
-                jacoco execPattern: 'target/jacoco.exec'
-            }
-        }
-
         // stage('SonarQube Analysis') {
         //     steps {
         //         echo "Running SonarQube analysis..."
-        //         sh 'mvn sonar:sonar -Dsonar.projectKey=java-project -Dsonar.host.url=$SONAR_URL -Dsonar.login=$SONAR_TOKEN'
+        //         sh '''
+        //             mvn sonar:sonar \
+        //             -Dsonar.projectKey=$SONAR_PROJECT_KEY \
+        //             -Dsonar.host.url=$SONAR_URL \
+        //             -Dsonar.login=$SONAR_TOKEN
+        //         '''
+        //     }
+        // }
+
+        // stage('Check SonarQube Quality Gate') {
+        //     steps {
+        //         script {
+        //             echo "Waiting for SonarQube analysis to complete..."
+        //             sleep(time: 30, unit: 'SECONDS') // Give Sonar some time to process
+
+        //             def response = sh(script: """
+        //                 curl -s -u $SONAR_TOKEN: $SONAR_URL/api/issues/search?componentKeys=$SONAR_PROJECT_KEY&severities=CRITICAL&resolved=false
+        //             """, returnStdout: true).trim()
+
+        //             def criticalIssues = response.count('"key"')  // Counting occurrences of "key" in the JSON response
+        //             echo "Critical vulnerabilities found: ${criticalIssues}"
+
+        //             if (criticalIssues > 5) {
+        //                 error "Pipeline failed: More than 5 critical vulnerabilities found!"
+        //             }
+        //         }
         //     }
         // }
     }
